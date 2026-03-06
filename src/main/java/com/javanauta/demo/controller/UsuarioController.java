@@ -2,6 +2,8 @@ package com.javanauta.demo.controller;
 
 
 import com.javanauta.demo.business.UsuarioService;
+import com.javanauta.demo.business.dto.EnderecoDTO;
+import com.javanauta.demo.business.dto.TelefoneDTO;
 import com.javanauta.demo.business.dto.UsuarioDTO;
 import com.javanauta.demo.infrastructure.entity.Usuario;
 import com.javanauta.demo.infrastructure.security.JwtUtil;
@@ -41,7 +43,7 @@ public class UsuarioController {
 
      ///por email
     @GetMapping("/email")
-    public ResponseEntity<Usuario> listarTodosUsuarios(@RequestParam("email") String email) {
+    public ResponseEntity<UsuarioDTO> listarTodosUsuarios(@RequestParam("email") String email) {
         return ResponseEntity.ok(usuarioService.buscarUserPorEmail(email));
     }
 
@@ -56,6 +58,27 @@ public class UsuarioController {
         usuarioService.deletarUsuarioPorEmail(email);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping
+    public ResponseEntity<UsuarioDTO> editarUsuario (@RequestBody UsuarioDTO usuarioDTO,
+                                                     @RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(usuarioService.atualizarDadosUsuario(token,usuarioDTO));
+    }
+
+    @PutMapping("/endereco")
+    public ResponseEntity<EnderecoDTO> editarEndereco (@RequestBody EnderecoDTO enderecoDTO,
+                                                       @RequestParam("Id") Long id){
+        return ResponseEntity.ok(usuarioService.atualizaEndereco(id,enderecoDTO));
+    }
+
+    @PutMapping("/telefone")
+    public ResponseEntity<TelefoneDTO> editarTelefone(@RequestBody TelefoneDTO telefoneDTO,
+                                                      @RequestParam("Id") Long id){
+        return ResponseEntity.ok(usuarioService.atualizarTelefone(id, telefoneDTO));
+    }
+
+
+
 
 
 }
